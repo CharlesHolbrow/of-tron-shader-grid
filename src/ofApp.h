@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxAutoReloadedShader.h"
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp {
 
 	public:
 		void setup();
@@ -24,4 +24,5 @@ class ofApp : public ofBaseApp{
 
     ofEasyCam cam;
     ofxAutoReloadedShader shader;
+    ofVboMesh mesh;
 };
