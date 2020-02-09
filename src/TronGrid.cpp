@@ -22,6 +22,7 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
 
     vector<ofVec2f> cartesianCoords(xSize * ySize * 6, { 0, 0 });
     vector<ofVec3f> vertices(xVerts * yVerts);
+
     {
         int i = 0;
         for (int y = 0; y < yVerts; y++) {
@@ -29,10 +30,12 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
                 float height = ofNoise(x * 0.05, y * 0.05);
                 height = ofMap(height, 0.75, 1., 0., 400., true);
                 ofVec3f vertex(x*cellSize, height, y*cellSize);
-                vertices[i++] = vertex;
+                vertices[i] = vertex;
+                i++; 
             }
         }
     }
+
 
     // ofBook section on working with Meshes
     // https://openframeworks.cc/ofBook/chapters/generativemesh.html#basicsworkingwithofmesh
