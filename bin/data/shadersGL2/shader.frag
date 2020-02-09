@@ -11,10 +11,18 @@ varying float convergance;
 // How var from the camera is the pixel
 varying float viewDistance;
 
+// map input range to 0-1
+float map(float v, float min, float max) {
+    return clamp((v - min) / (max - min), 0, 1);
+}
+
 void main()
 {
     vec2 uv = gl_FragCoord.xy / screenSize;
-    float width = .1;
+    float width = .06;
+    // Allow distant lines to grow thicker if they are at an accute angle
+    width += map(viewDistance, 100, 1600) * .3  * (1-convergance);
+
     float distanceFallof =  pow(0.5 + 1000/viewDistance, 1.3);
     float attenuation = min(1.4, distanceFallof * pow(convergance, 1.13));
     float cellSize = 50.;
