@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxAutoReloadedShader.h"
-
+#include "TronGrid.h"
 class ofApp : public ofBaseApp {
 
 	public:
@@ -23,6 +23,5 @@ class ofApp : public ofBaseApp {
 		void gotMessage(ofMessage msg);
 
     ofEasyCam cam;
-    ofxAutoReloadedShader shader;
-    ofVboMesh mesh;
+    TronGrid grid;
 };
