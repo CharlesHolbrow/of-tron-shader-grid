@@ -18,36 +18,76 @@ void ofApp::setup(){
     int yVerts = ySize + 1;
     float d = 50;
 
-    vector<ofVec2f> cartesianCoords(xVerts * yVerts, {0, 0});
+    vector<ofVec2f> cartesianCoords(xSize * ySize * 6, {0, 0});
+    vector<ofVec3f> vertices(xVerts * yVerts);
     {
         int i = 0;
         for (int y = 0; y < yVerts; y++) {
             for (int x = 0; x < xVerts; x++) {
                 float height = ofNoise(x * 0.05, y * 0.05);
                 height = ofMap(height, 0.75, 1., 0., 400., true);
-                mesh.addVertex({x * d, height, y * d});
-                cartesianCoords[i++] = ofVec2f(x, y);
+                ofVec3f vertex(x*d, height, y*d);
+                vertices[i++] = vertex;
             }
         }
     }
 
-    mesh.enableIndices();
-    mesh.clearIndices();
+    mesh.enableNormals();
     mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+    int i = 0;
     for (int y = 0; y < ySize; y++) {
         for (int x = 0; x < xSize; x++) {
             int a = y * xVerts + x;
             int b = a + xVerts + 1;
 
-            mesh.addIndex(a);
-            mesh.addIndex(b);
-            mesh.addIndex(b-1);
-            mesh.addIndex(a);
-            mesh.addIndex(a+1);
-            mesh.addIndex(b);
+            ofVec3f v0 = vertices[a];
+            ofVec3f v1 = vertices[b];
+            ofVec3f v2 = vertices[b-1];
+            mesh.addVertex(v0);
+            mesh.addVertex(v1);
+            mesh.addVertex(v2);
+            cartesianCoords[i++] = {v0.x / d, v0.z / d};
+            cartesianCoords[i++] = {v1.x / d, v1.z / d};
+            cartesianCoords[i++] = {v2.x / d, v2.z / d};
+
+            // Simple normals https://forum.openframeworks.cc/t/solved-how-to-properly-calculate-normals-of-the-box/25487
+            // normal for t1
+            ofVec3f U = v1 - v0;
+            ofVec3f V = v2 - v0;
+            float xn = (U.y * V.z) - (U.z * V.y);
+            float yn = (U.z * V.x) - (U.x * V.z);
+            float zn = (U.x * V.y) - (U.y * V.x);
+            ofVec3f normal = ofVec3f(xn,yn,zn);
+            normal.normalize();
+            mesh.addNormal(normal);
+            mesh.addNormal(normal);
+            mesh.addNormal(normal);
+
+            v0 = vertices[a];
+            v1 = vertices[a+1];
+            v2 = vertices[b];
+            mesh.addVertex(v0);
+            mesh.addVertex(v1);
+            mesh.addVertex(v2);
+            cartesianCoords[i++] = {v0.x / d, v0.z / d};
+            cartesianCoords[i++] = {v1.x / d, v1.z / d};
+            cartesianCoords[i++] = {v2.x / d, v2.z / d};
+
+            // normal for t2
+            U = v1 - v0;
+            V = v2 - v0;
+            xn = (U.y * V.z) - (U.z * V.y);
+            yn = (U.z * V.x) - (U.x * V.z);
+            zn = (U.x * V.y) - (U.y * V.x);
+            normal = ofVec3f(xn,yn,zn);
+            normal.normalize();
+            mesh.addNormal(normal);
+            mesh.addNormal(normal);
+            mesh.addNormal(normal);
         }
     }
-    // Give shader access to data
+
+    // Give shader access to cartesian coords
     // https://forum.openframeworks.cc/t/ofvbo-ofvbomesh-generic-attributes/9272/7
     shader.begin();
     int location = shader.getAttributeLocation("cartesianCoords");
@@ -55,7 +95,7 @@ void ofApp::setup(){
                                    location,
                                    &(cartesianCoords[0].x),
                                    2,
-                                   yVerts * xVerts,
+                                   ySize * xSize * 6,
                                    GL_DYNAMIC_DRAW,
                                    sizeof(ofVec2f));
     shader.end();
