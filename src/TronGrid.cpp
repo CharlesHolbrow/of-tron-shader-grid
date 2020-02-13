@@ -4,7 +4,7 @@
 
 TronGrid::TronGrid()
 {
-    shader.load("shadersGL2/shader");
+    shader.load("shadersGL3/grid");
 }
 
 

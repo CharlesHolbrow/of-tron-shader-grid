@@ -13,9 +13,7 @@ void ofApp::setup(){
 
     // Everything else
     starFbo.allocate(1028, 1028, GL_RGBA);
-    starShader.load("shadersGL2/stargen");
-
-
+//    starShader.load("shadersGL2/stargen");
 }
 
 //--------------------------------------------------------------
@@ -30,15 +28,15 @@ void ofApp::draw(){
     grid.draw();
     cam.end();
 
-    starFbo.begin();    // FBO begin
-    starShader.begin(); // Shader begin
-    ofClear(0, 0, 0, 0);
-    starShader.setUniform2f("screenSize", {1028, 1028});
-    ofDrawRectangle(0, 0, 1028, 1028);
-
-    starShader.end();   // Shader end
-    starFbo.end();
-    starFbo.draw(0, 0, 512, 512);
+//    starFbo.begin();    // FBO begin
+//    starShader.begin(); // Shader begin
+//    ofClear(0, 0, 0, 0);
+//    starShader.setUniform2f("screenSize", {1028, 1028});
+//    ofDrawRectangle(0, 0, 1028, 1028);
+//
+//    starShader.end();   // Shader end
+//    starFbo.end();
+//    starFbo.draw(0, 0, 512, 512);
 }
 
 //--------------------------------------------------------------
