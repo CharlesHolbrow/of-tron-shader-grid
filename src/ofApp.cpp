@@ -2,12 +2,20 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+    // Misc setup
     ofBackground(0);
     ofSetFrameRate(60);
     ofEnableSmoothing();
     ofEnableDepthTest();
 
+    // Grid
     grid.resize(80, 80, 50);
+
+    // Everything else
+    starFbo.allocate(1028, 1028, GL_RGBA);
+    starShader.load("shadersGL2/stargen");
+
+
 }
 
 //--------------------------------------------------------------
@@ -20,13 +28,17 @@ void ofApp::draw(){
     cam.begin();
     ofSetColor(255);
     grid.draw();
-
-
-//    mesh.drawFaces();
-//    ofSetColor(0, 0, 150);
-//    mesh.drawWireframe();
-
     cam.end();
+
+    starFbo.begin();    // FBO begin
+    starShader.begin(); // Shader begin
+    ofClear(0, 0, 0, 0);
+    starShader.setUniform2f("screenSize", {1028, 1028});
+    ofDrawRectangle(0, 0, 1028, 1028);
+
+    starShader.end();   // Shader end
+    starFbo.end();
+    starFbo.draw(0, 0, 512, 512);
 }
 
 //--------------------------------------------------------------
