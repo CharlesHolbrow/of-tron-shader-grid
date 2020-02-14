@@ -27,4 +27,6 @@ class ofApp : public ofBaseApp {
 
     ofFbo starFbo;
     ofxAutoReloadedShader starShader;
+    vector<ofVec3f> starPositions;
+    ofVbo stars;
 };
