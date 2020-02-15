@@ -5,14 +5,26 @@ void ofApp::setup(){
     // Misc setup
     ofBackground(0);
     ofSetFrameRate(60);
-    ofEnableSmoothing();
+//    ofEnableSmoothing();
+    ofEnableAntiAliasing();
     ofEnableDepthTest();
+    ofDisableArbTex();
+
+    // setup our main Fbo
+    ofFboSettings screenFboSettings;
+    screenFboSettings.numSamples = 0;
+    screenFboSettings.height = ofGetHeight();
+    screenFboSettings.width  = ofGetWidth();
+    screenFboSettings.internalformat = GL_RGBA;
+    screenFboSettings.useDepth = true;
+    screenFboSettings.depthStencilAsTexture = true;
+    screenFbo.allocate(screenFboSettings);
+
 
     // Grid
     grid.resize(80, 80, 50);
 
     // Stars
-    starFbo.allocate(1028, 1028, GL_RGBA);
     starShader.load("shadersGL3/stargen");
     // randomly add a point on a sphere
     int   num = 500;
@@ -39,19 +51,30 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    cam.begin();        // CAMERA BEGIN
+    screenFbo.begin();
+    ofClear(0);
+
 
     // grid
+    cam.begin();
     grid.draw();
+    cam.end();
 
     // stars
-    ofDisableArbTex();
     starShader.begin();
     ofEnablePointSprites();
     glDepthMask(GL_FALSE); // don't write to the depth mask (check only)
     ofEnableBlendMode(OF_BLENDMODE_ADD);
-
+    // Annoyingly, when a non-default VBO is active, shaders are not passed
+    // accurate camera matrices, so I am manually passing in camera matrices.
+    // Note that this means that we also have to manually flip the y-axis, which
+    // openFrameworks usually manages for us. This is necessary because OF and
+    // OpenGL use different coordinate conventions.
+    glm::mat4x4 flipY;
+    flipY[1][1] = -1.0;
     starShader.setUniform2f("screenSize", ofGetWidth(), ofGetHeight());
+    starShader.setUniformMatrix4f("mv", flipY * cam.getModelViewMatrix());
+    starShader.setUniformMatrix4f("p", cam.getProjectionMatrix());
     ofSetColor(255, 0, 0);
     stars.draw(GL_POINTS, 0, starPositions.size());
 
@@ -59,10 +82,10 @@ void ofApp::draw(){
     glDepthMask(GL_TRUE);
     ofDisablePointSprites();
     starShader.end();
-    ofEnableArbTex();
 
 
-    cam.end();          // CAMERA END
+    screenFbo.end();
+    screenFbo.draw(0, 0);
 }
 
 //--------------------------------------------------------------

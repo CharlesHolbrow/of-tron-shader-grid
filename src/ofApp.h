@@ -25,7 +25,7 @@ class ofApp : public ofBaseApp {
     ofEasyCam cam;
     TronGrid grid;
 
-    ofFbo starFbo;
+    ofFbo screenFbo;
     ofxAutoReloadedShader starShader;
     vector<ofVec3f> starPositions;
     ofVbo stars;
