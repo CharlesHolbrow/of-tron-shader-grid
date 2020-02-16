@@ -28,3 +28,19 @@ vector<ScreenInfo> getScreens() {
     }
     return screens;
 }
+
+char* getWindowModeString() {
+    int mode = ofGetWindowMode();
+    switch (mode) {
+    case OF_WINDOW:
+        return "OF_WINDOW";
+        break;
+    case OF_FULLSCREEN:
+        return "OF_FULLSCREEN";
+        break;
+    case OF_GAME_MODE:
+        return "OF_GAME_MODE";
+        break;
+    }
+    return "UNKNOWN";
+}

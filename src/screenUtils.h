@@ -26,3 +26,5 @@ struct ScreenInfo {
 void logGlfwScreens();
 
 vector<ScreenInfo> getScreens();
+
+char* getWindowModeString();

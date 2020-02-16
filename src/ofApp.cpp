@@ -43,7 +43,6 @@ void ofApp::draw() {
 
     // stars
     stars.draw(cam);
-
     screenFbo.end();
 
     ofSetColor(255);
@@ -52,8 +51,7 @@ void ofApp::draw() {
     // Show screen dimensions
     ofSetColor(255, 0, 0);
     char debugText[512];
-    ofGetScreenWidth();
-    sprintf_s(debugText, "WindowSize: %d x %d ScreenSize: %d x %d", ofGetWidth(), ofGetHeight(), ofGetScreenWidth(), ofGetScreenHeight());
+    sprintf_s(debugText, "WindowSize: %d x %d ScreenSize: %d x %d IsFullscreen: %s", ofGetWidth(), ofGetHeight(), ofGetScreenWidth(), ofGetScreenHeight(), getWindowModeString());
     ofDrawBitmapString(debugText, 5, 18);
 }
 
