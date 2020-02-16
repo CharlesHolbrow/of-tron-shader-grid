@@ -3,6 +3,11 @@
 #include "ofMain.h"
 #include "ofxAutoReloadedShader.h"
 #include "TronGrid.h"
+#include "StarField.h"
+#include "screenUtils.h"
+
+
+
 class ofApp : public ofBaseApp {
 
 	public:
@@ -24,9 +29,8 @@ class ofApp : public ofBaseApp {
 
     ofEasyCam cam;
     TronGrid grid;
+    StarField stars;
 
     ofFbo screenFbo;
-    ofxAutoReloadedShader starShader;
-    vector<ofVec3f> starPositions;
-    ofVbo stars;
+
 };

@@ -55,6 +55,12 @@
     <ClCompile Include="src\TronGrid.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\StarField.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\screenUtils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -165,6 +171,12 @@
       <Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
     </ClInclude>
     <ClInclude Include="src\TronGrid.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StarField.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\screenUtils.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
