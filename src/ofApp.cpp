@@ -6,18 +6,17 @@ void ofApp::setup(){
     ofBackground(0);
     ofSetFrameRate(60);
 //    ofEnableSmoothing();
-    ofEnableAntiAliasing();
+//    ofEnableAntiAliasing();
     ofEnableDepthTest();
     ofDisableArbTex();
 
     // setup our main Fbo
     ofFboSettings screenFboSettings;
-    screenFboSettings.numSamples = 0;
+    screenFboSettings.numSamples = 8;
     screenFboSettings.height = ofGetHeight();
     screenFboSettings.width  = ofGetWidth();
-    screenFboSettings.internalformat = GL_RGBA;
+    screenFboSettings.internalformat = GL_RGBA32F;
     screenFboSettings.useDepth = true;
-    screenFboSettings.depthStencilAsTexture = true;
     screenFbo.allocate(screenFboSettings);
 
 
@@ -90,6 +89,12 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+    switch (key) {
+    case OF_KEY_RETURN:
+        if (ofGetKeyPressed(OF_KEY_ALT) || ofGetKeyPressed(OF_KEY_LEFT_ALT))
+            ofToggleFullscreen();
+        break;
+    }
 
 }
 

@@ -10,18 +10,20 @@ void main() {
   // To get (-1, 1) coords at the "sprite" level
   vec2 uv = gl_PointCoord * 2. - 1.;
 
-  float d = max(0, (1-length(uv)));
-  float rays = 0;
-  float star = 0;
-  rays += .03 / abs(uv.x);
-  rays += .03 / abs(uv.y);
-  // float rays = abs(min(0.9, .1/uv.x) + min(0.9, .01/uv.y));
+  // 1 at the center, 0 at edge of sprite circle. Clamped 1-0
+  float d = max(0., (1.-length(uv)));
+
+  // create lens flare rays
+  float shape = 0.03;
+  float rays = 0.;
+  rays += min(shape / (abs(uv.x) + shape), 1.);
+  rays += min(shape / (abs(uv.y) + shape), 1.);
+
+  float star = 0.;
   star += d * rays;
   star += d * 0.1;
 
-  vec3 col = vec3(star);
-  col.g = 0.3;
-  
+  vec3 col = star * vec3(1, 1, 1); // Optionally adjust color
+
   fragColor = vec4(col, star);
-  // fragColor = vec4(fract(gl_PointCoord.x * 0.5), 0, 0, 1);
 }
