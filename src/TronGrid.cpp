@@ -28,7 +28,7 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
         for (int y = 0; y < yVerts; y++) {
             for (int x = 0; x < xVerts; x++) {
                 float height = ofNoise(x * 0.05, y * 0.05);
-                height = ofMap(height, 0.75, 1., 0., 400., true);
+                height = ofMap(height, 0.75, 1., 0., 8., true);
                 ofVec3f vertex(x*cellSize, height, y*cellSize);
                 vertices[i] = vertex;
                 i++; 

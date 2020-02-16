@@ -17,7 +17,7 @@ uniform mat4 p; // projection matrix
 uniform vec2 screenSize;
 
 // How big should we render the sprite?
-#define SPRITE_DIM 351.0
+#define SPRITE_DIM 7.0
 
 void main() {
 	// View space (aka "eye space") coordinates are in the camera frustrum

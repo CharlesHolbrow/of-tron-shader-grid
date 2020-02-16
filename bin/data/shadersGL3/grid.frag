@@ -24,11 +24,11 @@ void main()
     //vec2 uv = gl_FragCoord.xy / screenSize;
     float width = .06;
     // Allow distant lines to grow thicker if they are at an accute angle
-    width += map(viewDistance, 100, 1600) * .3  * (1-convergance);
+    width += map(viewDistance, 2, 32.) * .3  * (1-convergance);
 
-    float distanceFallof =  pow(0.5 + 1000/viewDistance, 1.3);
+    float distanceFallof =  pow(0.5 + 20/viewDistance, 1.3);
     float attenuation = min(1.4, distanceFallof * pow(convergance, 1.13));
-    float cellSize = 50.;
+    float cellSize = 1.;
 
     vec3 col = vec3(0);
 

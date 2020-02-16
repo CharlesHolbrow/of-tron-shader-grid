@@ -14,7 +14,7 @@ void StarField::setup() {
         p.x = cos(theta1) * cos(theta2);
         p.y = sin(theta1);
         p.z = cos(theta1) * sin(theta2);
-        p *= ofRandom(2000, 10000); // radius
+        p *= ofRandom(40, 200); // radius
         starPositions.push_back(p);
     }
     int count = starPositions.size();
