@@ -10,8 +10,11 @@ void ofApp::setup(){
     ofEnableDepthTest();
     ofDisableArbTex();
 
+    int w = 640;
+    int h = 360;
     // this sets fbo
-    windowResized(ofGetWidth(), ofGetHeight());
+    vs1.resize(w, h);
+    vs2.resize(w, h);
 
     // Grid
     grid.resize(80, 80, 1);
@@ -23,16 +26,15 @@ void ofApp::setup(){
     cam.setNearClip(1);
     cam.setFarClip(1000);
     cam.setDistance(13);
-    
-    c1.setNearClip(1);
-    c1.setFarClip(1000);
-    c1.setParent(cam);
-    c1.setFov(60);
+
+    vs1.setup(cam);
+    vs1.cam.setLensOffset({-1, 0});
+    vs2.setup(cam);
+    vs2.cam.setLensOffset({1, 0});
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
 }
 
 //--------------------------------------------------------------
@@ -41,36 +43,37 @@ void ofApp::draw() {
     cam.begin();
     cam.end();
 
-    screenFbo.begin();
-    ofClear(0);
-
-    // grid
-    c1.begin();
+    vs1.clear();
+    vs1.begin();
     grid.draw();
-    c1.end();
+    stars.draw(vs1.cam, vs1.fbo.getWidth(), vs1.fbo.getHeight());
+    vs1.end();
 
-    // stars
-    stars.draw(cam);
-    screenFbo.end();
+    vs2.clear();
+    vs2.begin();
+    grid.draw();
+    stars.draw(vs2.cam, vs2.fbo.getWidth(), vs2.fbo.getHeight());
+    vs2.end();
 
     ofSetColor(255);
-    screenFbo.draw(0, 0);
+    vs1.fbo.draw(0, 0, 640, 360);
+    vs2.fbo.draw(640, 0, 640, 360);
 
     // Show screen dimensions
-    ofSetColor(255, 0, 0);
-    char debugText[512];
-    sprintf_s(debugText, "WindowSize: %d x %d ScreenSize: %d x %d Window: %s FOV: %5.2f aspectRatio: %5.2f"
-        , ofGetWidth()
-        , ofGetHeight()
-        , ofGetScreenWidth()
-        , ofGetScreenHeight()
-        , getWindowModeString()
-        , cam.getFov()
-        , cam.getAspectRatio());
-    ofDrawBitmapString(debugText, 5, 18);
-    auto pos = cam.getGlobalPosition();
-    sprintf_s(debugText, "CAMERA Pos: %4.2f %4.2f %4.2f Near/Far: % 6.3f/% 6.3f Distance: % 6.3f ", pos.x, pos.y, pos.z, cam.getNearClip(), cam.getFarClip(), cam.getDistance());
-    ofDrawBitmapString(debugText, 5, 36);
+//    ofSetColor(255, 0, 0);
+//    char debugText[512];
+//    sprintf(debugText, "WindowSize: %d x %d ScreenSize: %d x %d Window: %s FOV: %5.2f aspectRatio: %5.2f"
+//        , ofGetWidth()
+//        , ofGetHeight()
+//        , ofGetScreenWidth()
+//        , ofGetScreenHeight()
+//        , getWindowModeString()
+//        , cam.getFov()
+//        , cam.getAspectRatio());
+//    ofDrawBitmapString(debugText, 5, 18);
+//    auto pos = cam.getGlobalPosition();
+//    sprintf(debugText, "CAMERA Pos: %4.2f %4.2f %4.2f Near/Far: % 6.3f/% 6.3f Distance: % 6.3f ", pos.x, pos.y, pos.z, cam.getNearClip(), cam.getFarClip(), cam.getDistance());
+//    ofDrawBitmapString(debugText, 5, 36);
 }
 
 //--------------------------------------------------------------
@@ -121,14 +124,7 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-    // setup our main Fbo
-    ofFboSettings screenFboSettings;
-    screenFboSettings.numSamples = 8;
-    screenFboSettings.height = ofGetHeight();
-    screenFboSettings.width = ofGetWidth();
-    screenFboSettings.internalformat = GL_RGBA32F;
-    screenFboSettings.useDepth = true;
-    screenFbo.allocate(screenFboSettings);
+
 }
 
 //--------------------------------------------------------------

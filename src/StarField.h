@@ -6,7 +6,8 @@
 class StarField {
 public:
     void setup();
-    void draw(ofCamera cam);
+    // Draw the star field to the current renderer.
+    void draw(ofCamera cam, int fboWidth, int fboHeight);
 
     ofxAutoReloadedShader starShader;
     vector<ofVec3f> starPositions;

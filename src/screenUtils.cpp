@@ -29,7 +29,7 @@ vector<ScreenInfo> getScreens() {
     return screens;
 }
 
-char* getWindowModeString() {
+const char* getWindowModeString() {
     int mode = ofGetWindowMode();
     switch (mode) {
     case OF_WINDOW:

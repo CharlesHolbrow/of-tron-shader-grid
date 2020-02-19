@@ -18,14 +18,24 @@ void StarField::setup() {
         starPositions.push_back(p);
     }
     int count = starPositions.size();
-    stars.setVertexData(&starPositions[0], count, GL_STATIC_DRAW);
+    stars.setVertexData(&starPositions[0], count, GL_DYNAMIC_DRAW);
 }
 
-void StarField::draw(ofCamera cam) {
+void StarField::draw(ofCamera cam, int fboWidth, int fboHeight) {
     starShader.begin();
     ofEnablePointSprites();
-    glDepthMask(GL_FALSE); // don't write to the depth mask (check only)
+    glDepthMask(GL_FALSE); // don't write to the depth buffer (check only)
     ofEnableBlendMode(OF_BLENDMODE_ADD);
+
+    // To calculate the size of the particle, the shader needs camera matrices
+    // with no lens offset. I'm calling this the "simple projection matrix" and
+    // "simple model view matrix".
+    glm::vec2 lensOffset = cam.getLensOffset();
+    cam.setLensOffset({0, 0});
+    starShader.setUniformMatrix4f("smv", cam.getModelViewMatrix());
+    starShader.setUniformMatrix4f("sp", cam.getProjectionMatrix());
+    cam.setLensOffset(lensOffset);
+
     // Annoyingly, when a non-default VBO is active, shaders are not passed
     // accurate camera matrices, so I am manually passing in camera matrices.
     // Note that this means that we also have to manually flip the y-axis, which
@@ -33,7 +43,7 @@ void StarField::draw(ofCamera cam) {
     // OpenGL use different coordinate conventions.
     glm::mat4x4 flipY;
     flipY[1][1] = -1.0;
-    starShader.setUniform2f("screenSize", ofGetWidth(), ofGetHeight());
+    starShader.setUniform2f("screenSize", fboWidth, fboHeight);
     starShader.setUniformMatrix4f("mv", flipY * cam.getModelViewMatrix());
     starShader.setUniformMatrix4f("p", cam.getProjectionMatrix());
     ofSetColor(255, 0, 0);
@@ -44,4 +54,3 @@ void StarField::draw(ofCamera cam) {
     ofDisablePointSprites();
     starShader.end();
 }
-

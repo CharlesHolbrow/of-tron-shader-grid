@@ -6,8 +6,6 @@
 #include "StarField.h"
 #include "screenUtils.h"
 
-
-
 class ofApp : public ofBaseApp {
 
 	public:
@@ -33,6 +31,6 @@ class ofApp : public ofBaseApp {
     TronGrid grid;
     StarField stars;
 
-    ofFbo screenFbo;
-
+    VirtualScreen vs1;
+    VirtualScreen vs2;
 };
