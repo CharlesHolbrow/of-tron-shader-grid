@@ -99,7 +99,7 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
     // Give shader access to cartesian coords
     // https://forum.openframeworks.cc/t/ofvbo-ofvbomesh-generic-attributes/9272/7
     shader.begin();
-    int location = shader.getAttributeLocation("cartesianCoords");
+    int location = shader.getAttributeLocation("gridPosition");
     mesh.getVbo().setAttributeData(
         location,
         &(cartesianCoords[0].x),

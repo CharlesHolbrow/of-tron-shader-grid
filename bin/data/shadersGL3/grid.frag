@@ -1,11 +1,11 @@
 #version 150
 
 uniform vec2 screenSize;
-in vec4 worldPos;
+in vec2 gridPositionVarying;
 
-// How perpendicular is the normal a ray project from the camera?
-// 1 = surface is perpendicular camera ray
-// 0 = surface is parallel camera ray
+// How perpendicular is the normal to a ray projected from the camera?
+// 1 = surface is perpendicular to camera ray
+// 0 = surface is parallel to camera ray
 in float convergance;
 
 // How var from the camera is the pixel
@@ -33,12 +33,12 @@ void main()
     vec3 col = vec3(0);
 
     // x axis
-    col.rb += smoothstep(width, 0, fract(worldPos.x / cellSize)) * attenuation * 0.5;
-    col.rb += smoothstep(1-width, 1, fract(worldPos.x / cellSize)) * attenuation * 0.5;
+    col.rb += smoothstep(width, 0, fract(gridPositionVarying.x)) * attenuation * 0.5;
+    col.rb += smoothstep(1-width, 1, fract(gridPositionVarying.x)) * attenuation * 0.5;
     col.r *= 2;
     // z axis
-    col.g  += smoothstep(width, 0, fract(worldPos.z / cellSize)) * attenuation;
-    col.g  += smoothstep(1-width, 1, fract(worldPos.z / cellSize)) * attenuation;
+    col.g  += smoothstep(width, 0, fract(gridPositionVarying.y)) * attenuation;
+    col.g  += smoothstep(1-width, 1, fract(gridPositionVarying.y)) * attenuation;
     col.rgb += attenuation * 0.025;
 
 	fragColor = vec4(col, 1.);
