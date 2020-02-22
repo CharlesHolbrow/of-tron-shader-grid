@@ -111,8 +111,11 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
 }
 
 void TronGrid::draw() {
+    ofPushMatrix();
+    ofTranslate({xSize * cellSize * -0.5, 0, ySize * cellSize * -0.5});
     shader.begin();
     shader.setUniform2f("screenSize", { ofGetWidth(), ofGetHeight() });
     mesh.draw();
     shader.end();
+    ofPopMatrix();
 }

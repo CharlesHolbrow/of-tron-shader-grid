@@ -17,7 +17,7 @@ void ofApp::setup(){
     vs2.resize(w, h);
 
     // Grid
-    grid.resize(80, 80, 1);
+    grid.resize(100, 100, 1);
 
     // Stars
     stars.setup();
