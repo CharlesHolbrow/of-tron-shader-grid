@@ -46,8 +46,13 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
     int i = 0;
     for (int y = 0; y < ySize; y++) {
         for (int x = 0; x < xSize; x++) {
-            int a = y * xVerts + x;
-            int b = a + xVerts + 1;
+            // Assume X increases right, y increases 'up'
+            // ^
+            // |
+            // Y
+            // + X--->
+            int a = y * xVerts + x; // vertex index of bottom left of cell
+            int b = a + xVerts + 1; // vertex index of upper right of cell
 
             ofVec3f v0 = vertices[a];
             ofVec3f v1 = vertices[b];
