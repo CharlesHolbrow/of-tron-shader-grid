@@ -37,6 +37,7 @@ struct VirtualScreen {
         settings.height = height;
         settings.useDepth = true;
         //settings.internalformat
+        fbo.clear();
         fbo.allocate(settings);
         cam.setAspectRatio((float)width/(float)height);
     };

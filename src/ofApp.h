@@ -26,11 +26,11 @@ class ofApp : public ofBaseApp {
 		void gotMessage(ofMessage msg);
 
     ofEasyCam cam;
-    ofCamera c1;
-    ofCamera c2;
     TronGrid grid;
     StarField stars;
 
     VirtualScreen vs1;
     VirtualScreen vs2;
+
+    bool resized = false;
 };

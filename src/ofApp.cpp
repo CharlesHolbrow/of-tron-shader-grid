@@ -56,8 +56,12 @@ void ofApp::draw() {
     vs2.end();
 
     ofSetColor(255);
-    vs1.fbo.draw(0, 0, 640, 360);
-    vs2.fbo.draw(640, 0, 640, 360);
+    if (!resized) {
+        vs1.fbo.draw(0, 0, 640, 360);
+        vs2.fbo.draw(640, 0, 640, 360);
+    } else {
+        vs1.fbo.draw(0, 0, ofGetWidth(), ofGetHeight());
+    }
 
     // Show screen dimensions
 //    ofSetColor(255, 0, 0);
@@ -74,6 +78,14 @@ void ofApp::draw() {
 //    auto pos = cam.getGlobalPosition();
 //    sprintf(debugText, "CAMERA Pos: %4.2f %4.2f %4.2f Near/Far: % 6.3f/% 6.3f Distance: % 6.3f ", pos.x, pos.y, pos.z, cam.getNearClip(), cam.getFarClip(), cam.getDistance());
 //    ofDrawBitmapString(debugText, 5, 36);
+}
+
+//--------------------------------------------------------------
+void ofApp::windowResized(int w, int h){
+    ofLog() << "Resized to: " << w << "x" << h << " - " << getWindowModeString();
+    resized = true;
+    vs1.cam.setLensOffset({0, 0});
+    vs1.resize(w, h);
 }
 
 //--------------------------------------------------------------
@@ -119,11 +131,6 @@ void ofApp::mouseEntered(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
 
 }
 
