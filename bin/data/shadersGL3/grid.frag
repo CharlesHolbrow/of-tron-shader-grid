@@ -14,17 +14,29 @@ in float viewDistance;
 // provided by openFrameworks
 out vec4 fragColor;
 
-// map input range to 0-1
-float map(float v, float min, float max) {
-    return clamp((v - min) / (max - min), 0, 1);
+// map input range to 0-1, clamping output
+float mapC(float v, float inMin, float inMax) {
+    return clamp((v - inMin) / (inMax - inMin), 0, 1);
 }
+float map(float v, float inMin, float inMax) {
+    return (v - inMin) / (inMax - inMin);
+}
+float map(float v, float inMin, float inMax, float outMin, float outMax) {
+    return (v - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
+}
+float mapC(float v, float inMin, float inMax, float outMin, float outMax) {
+    float mapped = (v - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
+    if (outMin > outMax) return clamp(mapped, outMax, outMin);
+    return clamp(mapped, outMin, outMax);
+}
+
 
 // The classic color scheme I used in development
 vec4 themeClassic() {
     float width = .06;
 
     // Allow distant lines to grow thicker if they are at an accute angle
-    width += map(viewDistance, 2, 32.) * .3  * (1-convergance);
+    width += mapC(viewDistance, 2, 32.) * .3  * (1-convergance);
 
     float distanceFallof =  pow(0.5 + 20/viewDistance, 1.3);
     float attenuation = min(1.4, distanceFallof * pow(convergance, 1.13));
@@ -43,22 +55,25 @@ vec4 themeClassic() {
 
 
 vec4 themeParametric(vec3 xColor, vec3 yColor) {
-    float width = .06;// + (cos(gridPositionVarying.x / 10) * 0.5 + 0.5) * 0.3;
+    float width = .06;
+    vec4 col = vec4(0, 0, 0, 1);
 
     // Allow distant lines to grow thicker if they are at an accute angle
-    width += map(viewDistance, 2, 32.) * .3  * (1-convergance);
+    width += mapC(viewDistance, 2, 32.) * .3  * (1-convergance);
 
     float distanceFallof =  pow(0.5 + 20/viewDistance, 1.3);
     float attenuation = min(1.4, distanceFallof * pow(convergance, 1.13));
 
-    vec4 col = vec4(0, 0, 0, 1);
+    float p = clamp(1 - map(length(gridPositionVarying), 5, 50), 0.0, 3);
+    p = mapC(length(gridPositionVarying), 10, 30, 1, 0);
+
     // x axis
-    col.rgb += xColor * (smoothstep(width, 0, fract(gridPositionVarying.x)) * attenuation);
-    col.rgb += xColor * (smoothstep(1-width, 1, fract(gridPositionVarying.x)) * attenuation);
+    col.rgb += xColor * (smoothstep(width, 0, fract(gridPositionVarying.x)) * attenuation) * p;
+    col.rgb += xColor * (smoothstep(1-width, 1, fract(gridPositionVarying.x)) * attenuation) * p;
 
     // z axis
-    col.rgb += yColor * (smoothstep(width, 0, fract(gridPositionVarying.y)) * attenuation);
-    col.rgb += yColor * (smoothstep(1-width, 1, fract(gridPositionVarying.y)) * attenuation);
+    col.rgb += yColor * (smoothstep(width, 0, fract(gridPositionVarying.y)) * attenuation * p);
+    col.rgb += yColor * (smoothstep(1-width, 1, fract(gridPositionVarying.y)) * attenuation * p);
 
     return col;
 }
@@ -66,7 +81,7 @@ vec4 themeParametric(vec3 xColor, vec3 yColor) {
 void main()
 {
     vec3 c1 = vec3(0, 0.5, 1.0);
-    vec3 c2 = vec3(0, 1.0, 0.5);
+    vec3 c2 = vec3(0.8, 0.0, 0.9);
     int theme = 1;
     vec4 color = vec4(0);
     switch(theme) {
@@ -74,7 +89,7 @@ void main()
         color = themeClassic();
         break;
     case 1:
-        color = themeParametric(c1, c1);
+        color = themeParametric(c1, c2);
         break;
     }
     fragColor = color;

@@ -20,6 +20,7 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
     yVerts = yCells + 1;
     cellSize = _cellSize;
 
+    // Every Cell has two triangles with three vertices.
     vector<ofVec2f> cartesianCoords(xSize * ySize * 6, { 0, 0 });
     vector<ofVec3f> vertices(xVerts * yVerts);
 
@@ -43,6 +44,8 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
     // https://openframeworks.cc/documentation/3d/ofMesh/
     mesh.enableNormals();
     mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+    int halfX = xSize / 2;
+    int halfY = ySize / 2;
     int i = 0;
     for (int y = 0; y < ySize; y++) {
         for (int x = 0; x < xSize; x++) {
@@ -53,6 +56,8 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
             // + X--->
             int a = y * xVerts + x; // vertex index of bottom left of cell
             int b = a + xVerts + 1; // vertex index of upper right of cell
+            float gridX = x - halfX;
+            float gridY = y - halfY;
 
             ofVec3f v0 = vertices[a];
             ofVec3f v1 = vertices[b];
@@ -60,9 +65,9 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
             mesh.addVertex(v0);
             mesh.addVertex(v1);
             mesh.addVertex(v2);
-            cartesianCoords[i++] = { v0.x / cellSize, v0.z / cellSize };
-            cartesianCoords[i++] = { v1.x / cellSize, v1.z / cellSize };
-            cartesianCoords[i++] = { v2.x / cellSize, v2.z / cellSize };
+            cartesianCoords[i++] = { gridX, gridY };
+            cartesianCoords[i++] = { gridX + 1, gridY + 1 };
+            cartesianCoords[i++] = { gridX, gridY + 1 };
 
             // Simple normals https://forum.openframeworks.cc/t/solved-how-to-properly-calculate-normals-of-the-box/25487
             // normal for t1
@@ -83,9 +88,9 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
             mesh.addVertex(v0);
             mesh.addVertex(v1);
             mesh.addVertex(v2);
-            cartesianCoords[i++] = { v0.x / cellSize, v0.z / cellSize };
-            cartesianCoords[i++] = { v1.x / cellSize, v1.z / cellSize };
-            cartesianCoords[i++] = { v2.x / cellSize, v2.z / cellSize };
+            cartesianCoords[i++] = { gridX, gridY };
+            cartesianCoords[i++] = { gridX + 1, gridY };
+            cartesianCoords[i++] = { gridX + 1, gridY + 1 };
 
             // normal for t2
             U = v1 - v0;
