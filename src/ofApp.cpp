@@ -62,22 +62,6 @@ void ofApp::draw() {
     } else {
         vs1.fbo.draw(0, 0, ofGetWidth(), ofGetHeight());
     }
-
-    // Show screen dimensions
-//    ofSetColor(255, 0, 0);
-//    char debugText[512];
-//    sprintf(debugText, "WindowSize: %d x %d ScreenSize: %d x %d Window: %s FOV: %5.2f aspectRatio: %5.2f"
-//        , ofGetWidth()
-//        , ofGetHeight()
-//        , ofGetScreenWidth()
-//        , ofGetScreenHeight()
-//        , getWindowModeString()
-//        , cam.getFov()
-//        , cam.getAspectRatio());
-//    ofDrawBitmapString(debugText, 5, 18);
-//    auto pos = cam.getGlobalPosition();
-//    sprintf(debugText, "CAMERA Pos: %4.2f %4.2f %4.2f Near/Far: % 6.3f/% 6.3f Distance: % 6.3f ", pos.x, pos.y, pos.z, cam.getNearClip(), cam.getFarClip(), cam.getDistance());
-//    ofDrawBitmapString(debugText, 5, 36);
 }
 
 //--------------------------------------------------------------
