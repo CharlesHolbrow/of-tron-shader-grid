@@ -34,7 +34,13 @@ void ofApp::setup(){
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofApp::update() {
+    if (ofGetKeyPressed('r')) {
+        float ramp = 0.0025;
+        glm::quat rotation  = glm::angleAxis(ramp, cam.getUpDir());
+        cam.rotateAround(rotation, cam.getTarget().getGlobalPosition());
+        cam.lookAt(cam.getTarget().getGlobalPosition(), glm::normalize(glm::vec3(0.2, 1, 0)));
+    }
 }
 
 //--------------------------------------------------------------
