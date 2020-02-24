@@ -125,6 +125,7 @@ void TronGrid::draw() {
     ofTranslate({xSize * cellSize * -0.5, 0, ySize * cellSize * -0.5});
     shader.begin();
     shader.setUniform2f("screenSize", { ofGetWidth(), ofGetHeight() });
+    shader.setUniform1f("time", ofGetElapsedTimef());
     mesh.draw();
     shader.end();
     ofPopMatrix();

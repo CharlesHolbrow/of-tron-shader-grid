@@ -1,6 +1,8 @@
 #version 150
+#define PI 3.1415926535897932384626433832795
 
 uniform vec2 screenSize;
+uniform float time;
 in vec2 gridPositionVarying;
 
 // How perpendicular is the normal to a ray projected from the camera?
@@ -14,12 +16,13 @@ in float viewDistance;
 // provided by openFrameworks
 out vec4 fragColor;
 
+// map input range to 0-1
+float map(float v, float inMin, float inMax) {
+    return (v - inMin) / (inMax - inMin);
+}
 // map input range to 0-1, clamping output
 float mapC(float v, float inMin, float inMax) {
     return clamp((v - inMin) / (inMax - inMin), 0, 1);
-}
-float map(float v, float inMin, float inMax) {
-    return (v - inMin) / (inMax - inMin);
 }
 float map(float v, float inMin, float inMax, float outMin, float outMax) {
     return (v - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
@@ -29,7 +32,6 @@ float mapC(float v, float inMin, float inMax, float outMin, float outMax) {
     if (outMin > outMax) return clamp(mapped, outMax, outMin);
     return clamp(mapped, outMin, outMax);
 }
-
 
 // The classic color scheme I used in development
 vec4 themeClassic() {
@@ -65,7 +67,7 @@ vec4 themeParametric(vec3 xColor, vec3 yColor) {
     float attenuation = min(1.4, distanceFallof * pow(convergance, 1.13));
 
     float p = clamp(1 - map(length(gridPositionVarying), 5, 50), 0.0, 3);
-    p = mapC(length(gridPositionVarying), 10, 30, 1, 0);
+    p = mapC(length(gridPositionVarying), 20, 50, 1, 0);
 
     // x axis
     col.rgb += xColor * (smoothstep(width, 0, fract(gridPositionVarying.x)) * attenuation) * p;
@@ -78,19 +80,33 @@ vec4 themeParametric(vec3 xColor, vec3 yColor) {
     return col;
 }
 
-void main()
-{
-    vec3 c1 = vec3(0, 0.5, 1.0);
-    vec3 c2 = vec3(0.8, 0.0, 0.9);
-    int theme = 1;
-    vec4 color = vec4(0);
+vec4 colorForTheme(int theme) {
+    vec3 c1 = vec3(0.8, 0.0, 0.9);
+    vec3 c2 = vec3(0, 0.5, 1.0);
+
     switch(theme) {
     case 0:
-        color = themeClassic();
+        return themeClassic();
         break;
     case 1:
-        color = themeParametric(c1, c2);
+        return themeParametric(c1, c2);
         break;
+    case 2:
+        return themeParametric(vec3(1), vec3(1));
     }
+}
+
+void main()
+{
+    float amountA = sin(time * PI / 10.) * .5 + 0.5;
+    float amountB = 1 - amountA;
+
+    vec4 colorA = colorForTheme(1) * amountA;
+    vec4 colorB = colorForTheme(2) * amountB;
+
+    vec4 color = vec4(0);
+    color += colorA;
+    color += colorB;
+
     fragColor = color;
 }
