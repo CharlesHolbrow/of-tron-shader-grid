@@ -61,6 +61,8 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
             int b = a + xVerts + 1;  // vertex index of upper right of cell
             int c = a + 1;           // vertex index of bottom right of cell
             int d = b - 1;           // vertex index of upper left of cell
+            // d b
+            // a c
             float gridX = x - halfX; // center the grid (x-axis)
             float gridY = y - halfY; // center the grid (y-axis)
             int ii = i;              // initial i value
@@ -110,11 +112,17 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
             mesh.addNormal(normal);
             mesh.addNormal(normal);
 
-            ofVec3f xDir = vertices[c] - vertices[a];
-            ofVec3f yDir = vertices[b] - vertices[d];
-            for (int k = 0; k < 6; k++) {
+            ofVec3f xDir = vertices[b] - vertices[d];
+            ofVec3f yDir = vertices[a] - vertices[d];
+            for (int k = 0; k < 3; k++) {
                 xDirection[ii+k] = xDir;
                 yDirection[ii+k] = yDir;
+            }
+            xDir = vertices[c] - vertices[a];
+            yDir = vertices[c] - vertices[b];
+            for (int k = 3; k < 6; k++) {
+                 xDirection[ii+k] = xDir;
+                 yDirection[ii+k] = yDir;
             }
         }
     }

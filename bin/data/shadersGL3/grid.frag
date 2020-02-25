@@ -8,7 +8,9 @@ in vec2 gridPositionVarying;
 // How perpendicular is the normal to a ray projected from the camera?
 // 1 = surface is perpendicular to camera ray
 // 0 = surface is parallel to camera ray
-in float convergance;
+in float convergence;
+in float xConvergence;
+in float yConvergence;
 
 // How var from the camera is the pixel
 in float viewDistance;
@@ -38,10 +40,10 @@ vec4 themeClassic() {
     float width = .06;
 
     // Allow distant lines to grow thicker if they are at an accute angle
-    width += mapC(viewDistance, 2, 32.) * .3  * (1-convergance);
+    width += mapC(viewDistance, 2, 32.) * .3  * (1-convergence);
 
     float distanceFallof =  pow(0.5 + 20/viewDistance, 1.3);
-    float attenuation = min(1.4, distanceFallof * pow(convergance, 1.13));
+    float attenuation = min(1.4, distanceFallof * pow(convergence, 1.13));
 
     vec4 col = vec4(0, 0, 0, 1);
     // x axis
@@ -61,21 +63,25 @@ vec4 themeParametric(vec3 xColor, vec3 yColor) {
     vec4 col = vec4(0, 0, 0, 1);
 
     // Allow distant lines to grow thicker if they are at an accute angle
-    width += mapC(viewDistance, 2, 32.) * .3  * (1-convergance);
+    width += mapC(viewDistance, 2, 32.) * .3  * (1-convergence);
 
     float distanceFallof =  pow(0.5 + 20/viewDistance, 1.3);
-    float attenuation = min(1.4, distanceFallof * pow(convergance, 1.13));
+    float attenuation = min(1.4, distanceFallof * pow(convergence, 1.13));
+    // attenuation = 1;
 
     float p = clamp(1 - map(length(gridPositionVarying), 5, 50), 0.0, 3);
     p = mapC(length(gridPositionVarying), 20, 50, 1, 0);
 
+    float xWidth = width + max(max(0, map(pow(xConvergence, 4), 0, 1, 0, 0.4)), max(0, map(viewDistance, 10, 80, 0, 0.3)));
+    float yWidth = width + max(max(0, map(pow(yConvergence, 4), 0, 1, 0, 0.4)), max(0, map(viewDistance, 10, 80, 0, 0.3)));
+
     // x axis
-    col.rgb += xColor * (smoothstep(width, 0, fract(gridPositionVarying.x)) * attenuation) * p;
-    col.rgb += xColor * (smoothstep(1-width, 1, fract(gridPositionVarying.x)) * attenuation) * p;
+    col.rgb += xColor * (smoothstep(xWidth, 0, fract(gridPositionVarying.x)) * attenuation) * p;
+    col.rgb += xColor * (smoothstep(1-xWidth, 1, fract(gridPositionVarying.x)) * attenuation) * p;
 
     // z axis
-    col.rgb += yColor * (smoothstep(width, 0, fract(gridPositionVarying.y)) * attenuation * p);
-    col.rgb += yColor * (smoothstep(1-width, 1, fract(gridPositionVarying.y)) * attenuation * p);
+    col.rgb += yColor * (smoothstep(yWidth, 0, fract(gridPositionVarying.y)) * attenuation * p);
+    col.rgb += yColor * (smoothstep(1-yWidth, 1, fract(gridPositionVarying.y)) * attenuation * p);
 
     return col;
 }
