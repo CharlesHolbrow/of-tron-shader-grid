@@ -72,8 +72,12 @@ vec4 themeParametric(vec3 xColor, vec3 yColor) {
     float p = clamp(1 - map(length(gridPositionVarying), 5, 50), 0.0, 3);
     p = mapC(length(gridPositionVarying), 20, 50, 1, 0);
 
-    float xWidth = width + max(max(0, map(pow(xConvergence, 4), 0, 1, 0, 0.4)), max(0, map(viewDistance, 10, 80, 0, 0.3)));
-    float yWidth = width + max(max(0, map(pow(yConvergence, 4), 0, 1, 0, 0.4)), max(0, map(viewDistance, 10, 80, 0, 0.3)));
+    float distanceModifier  = max(0, map(viewDistance, 10, 80, 0, 0.3));
+    float xConvergeModifier = map(pow(xConvergence, 4), 0, 1, 0, 0.4);
+    float yConvergeModifier = map(pow(yConvergence, 4), 0, 1, 0, 0.4);
+
+    float xWidth = width + max(distanceModifier, xConvergeModifier);
+    float yWidth = width + max(distanceModifier, yConvergeModifier);
 
     // x axis
     col.rgb += xColor * (smoothstep(xWidth, 0, fract(gridPositionVarying.x)) * attenuation) * p;
