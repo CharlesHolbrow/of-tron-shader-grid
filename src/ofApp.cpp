@@ -31,10 +31,21 @@ void ofApp::setup(){
     vs1.cam.setLensOffset({-1, 0});
     vs2.setup(cam);
     vs2.cam.setLensOffset({1, 0});
+    d1.duration = 10;
+    d1 = -100.0;
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
+    uint64_t currentFrameMicroseconds = ofGetElapsedTimeMicros();
+    uint64_t currentDeltaMicroseconds = currentFrameMicroseconds - lastFrameMicroseconds;
+    lastFrameMicroseconds = currentFrameMicroseconds;
+
+    double deltaSeconds = currentDeltaMicroseconds * 0.000001;
+    v1.advance(deltaSeconds);
+    t1.advance(deltaSeconds);
+    saw1.advance(deltaSeconds);
+
     if (ofGetKeyPressed('r')) {
         float ramp = 0.0025;
         glm::quat rotation  = glm::angleAxis(ramp, cam.getUpDir());
@@ -68,6 +79,11 @@ void ofApp::draw() {
     } else {
         vs1.fbo.draw(0, 0, ofGetWidth(), ofGetHeight());
     }
+
+    ofDisableDepthTest();
+    ofSetColor((double)saw1 * 255, 0, 0);
+    ofDrawCircle(20, 20, 10);
+    ofEnableDepthTest();
 }
 
 //--------------------------------------------------------------

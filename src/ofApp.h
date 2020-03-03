@@ -5,6 +5,7 @@
 #include "TronGrid.h"
 #include "StarField.h"
 #include "screenUtils.h"
+#include "Gen.h"
 
 class ofApp : public ofBaseApp {
 
@@ -33,4 +34,11 @@ class ofApp : public ofBaseApp {
     VirtualScreen vs2;
 
     bool resized = false;
+
+    // Generators
+    GenSin v1;
+    GenTri t1;
+    GenSaw saw1;
+    LerpD d1;
+    uint64_t lastFrameMicroseconds = 0;
 };
