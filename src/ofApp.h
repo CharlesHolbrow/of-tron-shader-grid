@@ -6,6 +6,7 @@
 #include "StarField.h"
 #include "screenUtils.h"
 #include "Gen.h"
+#include "ofxOsc.h"
 
 class ofApp : public ofBaseApp {
 
@@ -41,4 +42,7 @@ class ofApp : public ofBaseApp {
     GenSaw saw1;
     LerpD d1;
     uint64_t lastFrameMicroseconds = 0;
+
+    // OSC
+    ofxOscReceiver receiver;
 };

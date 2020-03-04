@@ -13,9 +13,10 @@
 struct LerpD {
 public:
     LerpD();
-    double duration = 1; // duration of lerp in seconds
-    explicit operator double() const;
-    LerpD& operator =(const double v);
+    double duration = 1;     // duration of lerp in seconds
+    operator double() const; // cast to double
+    double get() const;
+    void setTarget(double target);
 
 private:
     double initial = 0;
@@ -31,7 +32,8 @@ public:
     double max = 1;
     double min = -1;
     void advance(double deltaSeconds);
-    explicit operator double() const;
+    operator double() const;
+    double get() const;
     void setPeriod(double periodSeconds) { hz = 1./periodSeconds; };
 private:
     double accumulator = 0;
@@ -44,7 +46,8 @@ struct GenTri {
     double max = 1;
     double min = 0;
     void advance(double deltaSeconds);
-    explicit operator double() const;
+    operator double() const;
+    double get() const;
     void setPeriod(double periodSeconds) { hz = 1./periodSeconds; };
 private:
     double accumulator = 0; // ramps 0 - 1
@@ -57,6 +60,7 @@ struct GenSaw {
     double max = 1; // should really be 'end'
     void advance(double deltaSeconds);
     explicit operator double() const;
+    double get() const;
     void setPeriod(double periodSeconds) { hz = 1./periodSeconds; };
 private:
     double accumulator = 0;

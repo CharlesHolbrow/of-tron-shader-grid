@@ -31,8 +31,13 @@ void ofApp::setup(){
     vs1.cam.setLensOffset({-1, 0});
     vs2.setup(cam);
     vs2.cam.setLensOffset({1, 0});
+
+    // test lerp stuff
     d1.duration = 10;
-    d1 = -100.0;
+    d1.setTarget(-100.0);
+
+    // OSC
+    receiver.setup(12340);
 }
 
 //--------------------------------------------------------------
@@ -51,6 +56,12 @@ void ofApp::update() {
         glm::quat rotation  = glm::angleAxis(ramp, cam.getUpDir());
         cam.rotateAround(rotation, cam.getTarget().getGlobalPosition());
         cam.lookAt(cam.getTarget().getGlobalPosition(), glm::normalize(glm::vec3(0.2, 1, 0)));
+    }
+
+    // OSC
+    ofxOscMessage msg;
+    while (receiver.getNextMessage(msg)) {
+        ofLog() << msg.getAddress();
     }
 }
 
