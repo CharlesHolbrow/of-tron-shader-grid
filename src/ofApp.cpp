@@ -61,7 +61,7 @@ void ofApp::update() {
     // OSC
     ofxOscMessage msg;
     while (receiver.getNextMessage(msg)) {
-        ofLog() << msg.getAddress();
+        handleOscMessage(msg);
     }
 }
 
@@ -114,6 +114,10 @@ void ofApp::keyPressed(int key){
         break;
     }
 
+}
+
+void ofApp::handleOscMessage(const ofxOscMessage &msg) {
+    ofLog() << msg.getAddress();
 }
 
 //--------------------------------------------------------------
