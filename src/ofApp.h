@@ -1,12 +1,13 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxOsc.h"
 #include "ofxAutoReloadedShader.h"
 #include "TronGrid.h"
 #include "StarField.h"
 #include "screenUtils.h"
 #include "Gen.h"
-#include "ofxOsc.h"
+#include "Logo.h"
 
 class ofApp : public ofBaseApp {
 
@@ -36,6 +37,8 @@ class ofApp : public ofBaseApp {
     VirtualScreen vs2;
 
     bool resized = false;
+
+    Logo logo;
 
     // Generators
     GenSin v1;

@@ -17,6 +17,7 @@ public:
     operator double() const; // cast to double
     double get() const;
     void setTarget(double target);
+    void jumpTo(double value);
 
 private:
     double initial = 0;

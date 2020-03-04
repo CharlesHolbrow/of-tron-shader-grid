@@ -21,6 +21,11 @@ void LerpD::setTarget(double _target) {
     targetTime = initialTime + duration * 1000000;
 }
 
+void LerpD::jumpTo(double value) {
+    initial = value;
+    target = value;
+}
+
 double LerpD::get() const {
     double amount = ofGetElapsedTimeMicros() - initialTime; // microseconds elapsed since start
     amount = amount / (duration * 1000000);                 // mapped between 0 and 1

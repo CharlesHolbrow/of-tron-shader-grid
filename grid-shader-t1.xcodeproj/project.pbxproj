@@ -13,6 +13,7 @@
 		5615698323FA2A5600D9019A /* StarField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5615698023FA2A5600D9019A /* StarField.cpp */; };
 		5615698423FA2A5600D9019A /* screenUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5615698223FA2A5600D9019A /* screenUtils.cpp */; };
 		56156987240EF4E200D9019A /* Gen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 56156986240EF4E200D9019A /* Gen.cpp */; };
+		5615698A2410205200D9019A /* Logo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561569892410205200D9019A /* Logo.cpp */; };
 		561FC36523F1CB310005DDFE /* TronGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 561FC36423F1CB310005DDFE /* TronGrid.cpp */; };
 		5864AD82E20F15536D054EA3 /* ofxOscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DF49D76C45D5DB505A234880 /* ofxOscMessage.cpp */; };
 		622F2B6B3FFAA37224C22AD2 /* ofxAutoReloadedShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65E3959FF1F849DAE3BCC008 /* ofxAutoReloadedShader.cpp */; };
@@ -57,6 +58,8 @@
 		5615698223FA2A5600D9019A /* screenUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = screenUtils.cpp; sourceTree = "<group>"; };
 		56156985240EF4E200D9019A /* Gen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Gen.h; sourceTree = "<group>"; };
 		56156986240EF4E200D9019A /* Gen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Gen.cpp; sourceTree = "<group>"; };
+		561569882410205200D9019A /* Logo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logo.h; sourceTree = "<group>"; };
+		561569892410205200D9019A /* Logo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Logo.cpp; sourceTree = "<group>"; };
 		561FC36323F1CB310005DDFE /* TronGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TronGrid.h; sourceTree = "<group>"; };
 		561FC36423F1CB310005DDFE /* TronGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TronGrid.cpp; sourceTree = "<group>"; };
 		63A47AC60FFAFC3BF093EC0F /* OscOutboundPacketStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = OscOutboundPacketStream.cpp; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscOutboundPacketStream.cpp; sourceTree = SOURCE_ROOT; };
@@ -691,6 +694,8 @@
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
 				56156985240EF4E200D9019A /* Gen.h */,
 				56156986240EF4E200D9019A /* Gen.cpp */,
+				561569882410205200D9019A /* Logo.h */,
+				561569892410205200D9019A /* Logo.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -830,6 +835,7 @@
 				0546D1A38E13BD319CC9755B /* OscReceivedElements.cpp in Sources */,
 				879A251454401BC0B6E4F238 /* OscTypes.cpp in Sources */,
 				72A929D3561B8232A182ABFC /* ofxOscBundle.cpp in Sources */,
+				5615698A2410205200D9019A /* Logo.cpp in Sources */,
 				5615698423FA2A5600D9019A /* screenUtils.cpp in Sources */,
 				5864AD82E20F15536D054EA3 /* ofxOscMessage.cpp in Sources */,
 				4ADB88E2FB52E76A471065DE /* ofxOscParameterSync.cpp in Sources */,

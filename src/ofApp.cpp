@@ -22,6 +22,9 @@ void ofApp::setup(){
     // Stars
     stars.setup();
 
+    // Logo
+    logo.setup();
+
     // Camera Stuff
     cam.setNearClip(1);
     cam.setFarClip(1000);
@@ -58,6 +61,9 @@ void ofApp::update() {
         cam.lookAt(cam.getTarget().getGlobalPosition(), glm::normalize(glm::vec3(0.2, 1, 0)));
     }
 
+    // Logo
+    logo.update(deltaSeconds);
+
     // OSC
     ofxOscMessage msg;
     while (receiver.getNextMessage(msg)) {
@@ -75,6 +81,7 @@ void ofApp::draw() {
     vs1.begin();
     grid.draw();
     stars.draw(vs1.cam, vs1.fbo.getWidth(), vs1.fbo.getHeight());
+    logo.draw();
     vs1.end();
 
     vs2.clear();
@@ -94,6 +101,7 @@ void ofApp::draw() {
     ofDisableDepthTest();
     ofSetColor((double)saw1 * 255, 0, 0);
     ofDrawCircle(20, 20, 10);
+    ofSetColor(255);
     ofEnableDepthTest();
 }
 
