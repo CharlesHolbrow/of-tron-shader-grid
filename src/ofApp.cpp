@@ -10,6 +10,10 @@ void ofApp::setup(){
     ofEnableDepthTest();
     ofDisableArbTex();
 
+    // prepare fbo
+    vs0.resize(ofGetWidth(), ofGetHeight());
+
+    // stuff for two screen mode
     int w = 640;
     int h = 360;
     // this sets fbo
@@ -17,7 +21,7 @@ void ofApp::setup(){
     vs2.resize(w, h);
 
     // Grid
-    grid.resize(100, 100, 1);
+    grid.resize(60, 60, 1);
 
     // Stars
     stars.setup();
@@ -30,14 +34,14 @@ void ofApp::setup(){
     cam.setFarClip(1000);
     cam.setDistance(13);
 
+    vs0.setup(cam);
     vs1.setup(cam);
     vs1.cam.setLensOffset({-1, 0});
     vs2.setup(cam);
     vs2.cam.setLensOffset({1, 0});
 
-    // test lerp stuff
-    d1.duration = 10;
-    d1.setTarget(-100.0);
+    // lerp stuff
+    lerpZoom.duration = 0.5;
 
     // OSC
     receiver.setup(12340);
@@ -45,11 +49,13 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update() {
+    // Calculate the frame's delta
     uint64_t currentFrameMicroseconds = ofGetElapsedTimeMicros();
     uint64_t currentDeltaMicroseconds = currentFrameMicroseconds - lastFrameMicroseconds;
     lastFrameMicroseconds = currentFrameMicroseconds;
-
     double deltaSeconds = currentDeltaMicroseconds * 0.000001;
+
+    // bump our LFOs
     v1.advance(deltaSeconds);
     t1.advance(deltaSeconds);
     saw1.advance(deltaSeconds);
@@ -66,9 +72,9 @@ void ofApp::update() {
 
     // OSC
     ofxOscMessage msg;
-    while (receiver.getNextMessage(msg)) {
-        handleOscMessage(msg);
-    }
+    while (receiver.getNextMessage(msg)) handleOscMessage(msg);
+
+    cam.setDistance(lerpZoom.get());
 }
 
 //--------------------------------------------------------------
@@ -77,25 +83,33 @@ void ofApp::draw() {
     cam.begin();
     cam.end();
 
-    vs1.clear();
-    vs1.begin();
-    grid.draw();
-    stars.draw(vs1.cam, vs1.fbo.getWidth(), vs1.fbo.getHeight());
-    logo.draw();
-    vs1.end();
+    if (twoScreenMode) {
+        vs1.clear();
+        vs1.begin();
+        grid.draw();
+        stars.draw(vs1.cam, vs1.fbo.getWidth(), vs1.fbo.getHeight());
+        logo.draw();
+        vs1.end();
 
-    vs2.clear();
-    vs2.begin();
-    grid.draw();
-    stars.draw(vs2.cam, vs2.fbo.getWidth(), vs2.fbo.getHeight());
-    vs2.end();
-
-    ofSetColor(255);
-    if (!resized) {
+        vs2.clear();
+        vs2.begin();
+        grid.draw();
+        stars.draw(vs2.cam, vs2.fbo.getWidth(), vs2.fbo.getHeight());
+        logo.draw();
+        vs2.end();
+        // draw the two screens
         vs1.fbo.draw(0, 0, 640, 360);
         vs2.fbo.draw(640, 0, 640, 360);
     } else {
-        vs1.fbo.draw(0, 0, ofGetWidth(), ofGetHeight());
+        vs0.clear();
+        vs0.begin();
+        grid.draw();
+        stars.draw(vs0.cam, vs0.fbo.getWidth(), vs0.fbo.getHeight());
+        logo.draw();
+        vs0.end();
+        // draw one screen
+        ofSetColor(255);
+        vs0.fbo.draw(0, 0, ofGetWidth(), ofGetHeight());
     }
 
     ofDisableDepthTest();
@@ -109,8 +123,7 @@ void ofApp::draw() {
 void ofApp::windowResized(int w, int h){
     ofLog() << "Resized to: " << w << "x" << h << " - " << getWindowModeString();
     resized = true;
-    vs1.cam.setLensOffset({0, 0});
-    vs1.resize(w, h);
+    vs0.resize(w, h);
 }
 
 //--------------------------------------------------------------
@@ -125,7 +138,15 @@ void ofApp::keyPressed(int key){
 }
 
 void ofApp::handleOscMessage(const ofxOscMessage &msg) {
-    ofLog() << msg.getAddress();
+    auto addr = msg.getAddress();
+
+    if (addr == "/1/fader1") {
+        lerpZoom.setTarget(ofMap(msg.getArgAsFloat(0), 0, 1, 80, 1));
+    } else if (addr == "/1/fader2") {
+        ofLog() << msg.getArgAsFloat(0);
+    } else {
+        ofLog() << "Unhandled:" << addr;
+    }
 }
 
 //--------------------------------------------------------------

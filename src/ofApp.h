@@ -33,9 +33,10 @@ class ofApp : public ofBaseApp {
     TronGrid grid;
     StarField stars;
 
+    VirtualScreen vs0;
     VirtualScreen vs1;
     VirtualScreen vs2;
-
+    bool twoScreenMode = false;
     bool resized = false;
 
     Logo logo;
@@ -44,7 +45,7 @@ class ofApp : public ofBaseApp {
     GenSin v1;
     GenTri t1;
     GenSaw saw1;
-    LerpD d1;
+    LerpD lerpZoom;
     uint64_t lastFrameMicroseconds = 0;
 
     // OSC
