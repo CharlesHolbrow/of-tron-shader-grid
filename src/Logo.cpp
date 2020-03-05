@@ -9,7 +9,7 @@
 
 void Logo::setup() {
     image.load("space-glam.png");
-    node.setScale(8);
+    node.setScale(48);
     node.move(0, 2, 0);
 }
 
@@ -18,11 +18,14 @@ void Logo::update(double deltaSeconds) {
 }
 
 void Logo::draw() {
+    if (!enabled) return;
+
     float ar = (float)image.getWidth() / (float)image.getHeight();
 
     ofSetColor(255);
     ofPushMatrix();
     ofMultMatrix(node.getGlobalTransformMatrix());
     image.draw({-0.5, -0.5/ar, 0}, 1, 1/ar);
+    ofEnableBlendMode(OF_BLENDMODE_ALPHA); // TODO: double check if this is actually the default blend mode
     ofPopMatrix();
 }

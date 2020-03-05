@@ -22,6 +22,8 @@ void StarField::setup() {
 }
 
 void StarField::draw(ofCamera cam, int fboWidth, int fboHeight) {
+    if (!enabled) return;
+
     starShader.begin();
     ofEnablePointSprites();
     glDepthMask(GL_FALSE); // don't write to the depth buffer (check only)

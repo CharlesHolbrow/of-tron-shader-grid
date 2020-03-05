@@ -146,6 +146,8 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
 }
 
 void TronGrid::draw() {
+    if (!enabled) return;
+
     ofPushMatrix();
     ofTranslate({xSize * cellSize * -0.5, 0, ySize * cellSize * -0.5});
     shader.begin();

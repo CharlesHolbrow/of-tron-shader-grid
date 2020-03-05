@@ -98,16 +98,17 @@ void ofApp::draw() {
         vs1.clear();
         vs1.begin();
         grid.draw();
-        stars.draw(vs1.cam, vs1.fbo.getWidth(), vs1.fbo.getHeight());
         logo.draw();
+        stars.draw(vs1.cam, vs1.fbo.getWidth(), vs1.fbo.getHeight());
         vs1.end();
 
         vs2.clear();
         vs2.begin();
         grid.draw();
-        stars.draw(vs2.cam, vs2.fbo.getWidth(), vs2.fbo.getHeight());
         logo.draw();
+        stars.draw(vs2.cam, vs2.fbo.getWidth(), vs2.fbo.getHeight());
         vs2.end();
+
         // draw the two screens
         vs1.fbo.draw(0, 0, 640, 360);
         vs2.fbo.draw(640, 0, 640, 360);
@@ -172,7 +173,13 @@ void ofApp::handleOscMessage(const ofxOscMessage &msg) {
         float v = msg.getArgAsFloat(0);
         v = ofMap(v, 0, 1, 0, PI/2);
         orbitAngle.setTarget(v);
-
+    } else if (addr == "/1/toggle1") {
+        logo.enabled = msg.getArgAsInt32(0);
+    } else if (addr == "/1/toggle2") {
+        stars.enabled = msg.getArgAsInt32(0);
+    } else if (addr == "/1/toggle3") {
+        grid.enabled = msg.getArgAsInt32(0);
+    } else if (addr == "/1/toggle4") {
     } else {
         ofLog() << "Unhandled:" << addr;
     }

@@ -12,4 +12,5 @@ public:
     ofxAutoReloadedShader starShader;
     vector<ofVec3f> starPositions;
     ofVbo stars;
+    bool enabled = true;
 };

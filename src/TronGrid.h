@@ -13,6 +13,8 @@ public:
     void resize(int xCells, int yCells, float cellSize);
     void draw();
 
+    bool enabled = true;
+
 private:
     // How many quads in the x/y dimensions
     int xSize;

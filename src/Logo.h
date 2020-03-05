@@ -13,6 +13,7 @@ class Logo {
 public:
     ofImage image;
     ofNode node;
+    bool enabled;
 
     void setup();
     void update(double deltaSeconds);
