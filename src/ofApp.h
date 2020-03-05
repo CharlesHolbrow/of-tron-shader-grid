@@ -40,12 +40,17 @@ class ofApp : public ofBaseApp {
     bool resized = false;
 
     Logo logo;
+    glm::vec3 upAxis = {0, 1, 0};
 
     // Generators
     GenSin v1;
     GenTri t1;
     GenSaw saw1;
     LerpD lerpZoom;
+    LerpD orbitSpeed;
+    float orbitRadians = 0;
+    LerpD orbitAngle;
+    float restingOrbitSpeed = 0;
     uint64_t lastFrameMicroseconds = 0;
 
     // OSC

@@ -33,6 +33,7 @@ void ofApp::setup(){
     cam.setNearClip(1);
     cam.setFarClip(1000);
     cam.setDistance(13);
+    cam.setRelativeYAxis(false);
 
     vs0.setup(cam);
     vs1.setup(cam);
@@ -42,6 +43,8 @@ void ofApp::setup(){
 
     // lerp stuff
     lerpZoom.duration = 0.5;
+    orbitSpeed.duration = 3;
+    orbitAngle.duration = 10;
 
     // OSC
     receiver.setup(12340);
@@ -75,6 +78,14 @@ void ofApp::update() {
     while (receiver.getNextMessage(msg)) handleOscMessage(msg);
 
     cam.setDistance(lerpZoom.get());
+
+    // Orbit
+    orbitRadians += float(orbitSpeed) * deltaSeconds;
+    float distance = glm::length(cam.getGlobalPosition() - cam.getTarget().getGlobalPosition());
+    glm::vec3 pos = glm::rotate(glm::vec3(0, 0, distance), orbitRadians, upAxis);
+    upAxis = glm::rotate(glm::vec3(0, 1, 0), (float)orbitAngle.get(), glm::vec3(1, 0, 0));
+    cam.setPosition(pos);
+    cam.lookAt(logo.node, upAxis);
 }
 
 //--------------------------------------------------------------
@@ -141,9 +152,27 @@ void ofApp::handleOscMessage(const ofxOscMessage &msg) {
     auto addr = msg.getAddress();
 
     if (addr == "/1/fader1") {
+        // zoom
         lerpZoom.setTarget(ofMap(msg.getArgAsFloat(0), 0, 1, 80, 1));
-    } else if (addr == "/1/fader2") {
-        ofLog() << msg.getArgAsFloat(0);
+    } else if (addr == "/1/fader5") {
+        // bump orbit
+        float v = msg.getArgAsFloat(0);
+        float target = ofMap(v, 0, 1, -3, 3);
+        orbitSpeed.jumpTo(target);
+        restingOrbitSpeed = (target >= 0) ? abs(restingOrbitSpeed) : abs(restingOrbitSpeed) * -1;
+        orbitSpeed.setTarget(restingOrbitSpeed);
+    } else if (addr == "/1/fader3") {
+        // resting orbit speed
+        float v = ofMap(msg.getArgAsFloat(0), 0, 1, 0, 0.3);
+        if (orbitSpeed >= 0) restingOrbitSpeed = v;
+        else restingOrbitSpeed = -v;
+        orbitSpeed.setTarget(restingOrbitSpeed);
+    } else if (addr == "/1/fader4") {
+        // orbit angle
+        float v = msg.getArgAsFloat(0);
+        v = ofMap(v, 0, 1, 0, PI/2);
+        orbitAngle.setTarget(v);
+
     } else {
         ofLog() << "Unhandled:" << addr;
     }

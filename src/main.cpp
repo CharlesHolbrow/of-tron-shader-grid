@@ -7,6 +7,7 @@ int main( ){
     ofGLFWWindowSettings settings;
     settings.setGLVersion(3,3);
     settings.setSize(1280, 360);
+    settings.setSize(800, 450);
     settings.windowMode = OF_WINDOW;
     settings.multiMonitorFullScreen = false;
 
