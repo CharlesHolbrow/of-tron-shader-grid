@@ -162,7 +162,7 @@ void TronGrid::setTargetColor1(ofColor c) {
 }
 
 void TronGrid::setTargetColor2(ofColor c) {
-    ofColor currentC2 = cF1.getLerped(cT2, cLerp2.get());
+    ofColor currentC2 = cF2.getLerped(cT2, cLerp2.get());
     cF2 = currentC2;
     cT2 = c;
     cLerp2.jumpTo(0);
