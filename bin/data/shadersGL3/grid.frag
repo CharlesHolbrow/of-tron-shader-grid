@@ -86,10 +86,8 @@ vec4 themeParametric(vec3 xColor, vec3 yColor) {
     col.rgb += xColor * (smoothstep(1-xWidth, 1, fract(gridPositionVarying.x)) * attenuation) * p;
 
     // z axis
-    vec3 tempCol = yColor * (smoothstep(yWidth, 0, fract(gridPositionVarying.y)) * attenuation * p);
-        tempCol += yColor * (smoothstep(1-yWidth, 1, fract(gridPositionVarying.y)) * attenuation * p);
-    // if (dot(tempCol, vec3(1)) > dot(col.rgb, vec3(1))) col.rgb = tempCol; // alternative blending
-    col.rgb += tempCol;
+    col.rgb += yColor * (smoothstep(yWidth, 0, fract(gridPositionVarying.y)) * attenuation * p);
+    col.rgb += yColor * (smoothstep(1-yWidth, 1, fract(gridPositionVarying.y)) * attenuation * p);
 
     return col;
 }

@@ -5,7 +5,8 @@
 TronGrid::TronGrid()
 {
     shader.load("shadersGL3/grid");
-    cLerp.duration = 1;
+    cLerp1.duration = 0.25;
+    cLerp2.duration = 0.25;
     setTargetColors({255, 255, 255}, {255, 255, 255});
 }
 
@@ -148,16 +149,26 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
 }
 
 void TronGrid::setTargetColors(ofColor c1, ofColor c2) {
-    float lerp = cLerp.get();
-    ofColor currentC1 = cF1.getLerped(cT1, lerp);
-    ofColor currentC2 = cF2.getLerped(cT2, lerp);
-    cF1 = currentC1;
-    cF2 = currentC2;
-    cT1 = c1;
-    cT2 = c2;
-    cLerp.jumpTo(0);
-    cLerp.setTarget(1);
+    setTargetColor1(c1);
+    setTargetColor2(c2);
 }
+
+void TronGrid::setTargetColor1(ofColor c) {
+    ofColor currentC1 = cF1.getLerped(cT1, cLerp1.get());
+    cF1 = currentC1;
+    cT1 = c;
+    cLerp1.jumpTo(0);
+    cLerp1.setTarget(1);
+}
+
+void TronGrid::setTargetColor2(ofColor c) {
+    ofColor currentC2 = cF1.getLerped(cT2, cLerp2.get());
+    cF2 = currentC2;
+    cT2 = c;
+    cLerp2.jumpTo(0);
+    cLerp2.setTarget(1);
+}
+
 
 void TronGrid::draw() {
     if (!enabled) return;
@@ -165,9 +176,8 @@ void TronGrid::draw() {
     ofPushMatrix();
     ofTranslate({xSize * cellSize * -0.5, 0, ySize * cellSize * -0.5});
     shader.begin();
-    float lerp = cLerp.get();
-    shader.setUniform4f("c1", ofFloatColor(cF1.getLerped(cT1, lerp)));
-    shader.setUniform4f("c2", ofFloatColor(cF2.getLerped(cT2, lerp)));
+    shader.setUniform4f("c1", ofFloatColor(cF1.getLerped(cT1, cLerp1.get())));
+    shader.setUniform4f("c2", ofFloatColor(cF2.getLerped(cT2, cLerp2.get())));
     shader.setUniform2f("screenSize", { ofGetWidth(), ofGetHeight() });
     shader.setUniform1f("time", ofGetElapsedTimef());
     mesh.draw();

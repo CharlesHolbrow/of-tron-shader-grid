@@ -42,7 +42,7 @@ void ofApp::setup(){
     vs2.cam.setLensOffset({1, 0});
 
     // lerp stuff
-    lerpZoom.duration = 0.5;
+    lerpZoom.duration = 0.75;
     orbitSpeed.duration = 3;
     orbitAngle.duration = 10;
 
@@ -175,9 +175,23 @@ void ofApp::handleOscMessage(const ofxOscMessage &msg) {
     } else if (addr == "/1/toggle3") {
         grid.enabled = msg.getArgAsInt32(0);
     } else if (addr == "/1/toggle4") {
-    } else if (addr == "/2/fader6")  { // page 2
+    } else if (addr == "/2/fader6")  { // page 2 speed fader
         float v = msg.getArgAsFloat(0);
-        grid.cLerp.duration = ofMap(v, 0, 1, 0, 5);
+        v = ofMap(v*v, 0, 1, 0, 30);
+        grid.cLerp1.duration = v;
+        grid.cLerp2.duration = v;
+    } else if (addr == "/2/fader7")  { // color 1
+        float v = msg.getArgAsFloat(0);
+        int hue = (int)(v * 256);
+        ofColor c;
+        c.setHsb(hue, 255, 255);
+        grid.setTargetColor1(c);
+    } else if (addr == "/2/fader8")  { // color 2
+        float v = msg.getArgAsFloat(0);
+        int hue = (int)(v * 256);
+        ofColor c;
+        c.setHsb(hue, 255, 255);
+        grid.setTargetColor2(c);
     } else if (addr == "/2/push1")  {
         if (msg.getArgAsInt32(0)) { grid.setTargetColors({255, 255, 255}, {255, 255, 255}); } // white
     } else if (addr == "/2/push2")  {
@@ -185,9 +199,15 @@ void ofApp::handleOscMessage(const ofxOscMessage &msg) {
     } else if (addr == "/2/push3")  {
         if (msg.getArgAsInt32(0)) { grid.setTargetColors({204, 0, 230}, {0, 127, 255}); }     // purple/blue
     } else if (addr == "/2/push4")  {
-        if (msg.getArgAsInt32(0)) { grid.setTargetColors({0, 120, 255}, {0, 255, 255}); }     // blue/green
+        if (msg.getArgAsInt32(0)) { grid.setTargetColors({0, 120, 255}, {0, 255, 255}); }     // two blues
     } else if (addr == "/2/push5")  {
         if (msg.getArgAsInt32(0)) { grid.setTargetColors({50, 255, 50}, {0, 50, 255}); }      // green/blue
+    } else if (addr == "/2/push6")  {
+        if (msg.getArgAsInt32(0)) { grid.setTargetColors({100, 200, 250}, {130, 120, 255}); } // purple/lb
+    } else if (addr == "/2/push7")  {
+        if (msg.getArgAsInt32(0)) { grid.setTargetColors({200, 220, 50}, {80, 50, 255}); }    // yellow/blue
+    } else if (addr == "/2/push8")  {
+        if (msg.getArgAsInt32(0)) { grid.setTargetColors({100, 180, 100}, {80, 250, 55}); }   //
     } else {
         ofLog() << "Unhandled:" << addr;
     }

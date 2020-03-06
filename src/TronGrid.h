@@ -18,8 +18,11 @@ public:
     ofColor cF1 = ofColor(255, 255, 255);
     ofColor cT2 = ofColor(255, 255, 255);
     ofColor cF2 = ofColor(255, 255, 255);
-    LerpD cLerp;
+    LerpD cLerp1;
+    LerpD cLerp2;
     void setTargetColors(ofColor c1, ofColor c2);
+    void setTargetColor1(ofColor c);
+    void setTargetColor2(ofColor c);
 
 private:
     // How many quads in the x/y dimensions
