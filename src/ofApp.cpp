@@ -185,9 +185,9 @@ void ofApp::handleOscMessage(const ofxOscMessage &msg) {
     } else if (addr == "/2/push3")  {
         if (msg.getArgAsInt32(0)) { grid.setTargetColors({204, 0, 230}, {0, 127, 255}); }     // purple/blue
     } else if (addr == "/2/push4")  {
-        if (msg.getArgAsInt32(0)) { grid.setTargetColors({0, 120, 255}, {0, 255, 255}); }
+        if (msg.getArgAsInt32(0)) { grid.setTargetColors({0, 120, 255}, {0, 255, 255}); }     // blue/green
     } else if (addr == "/2/push5")  {
-        if (msg.getArgAsInt32(0)) { grid.setTargetColors({50, 50, 50}, {0, 0, 255}); }
+        if (msg.getArgAsInt32(0)) { grid.setTargetColors({50, 255, 50}, {0, 50, 255}); }      // green/blue
     } else {
         ofLog() << "Unhandled:" << addr;
     }
