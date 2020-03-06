@@ -5,6 +5,8 @@
 TronGrid::TronGrid()
 {
     shader.load("shadersGL3/grid");
+    cLerp.duration = 1;
+    setTargetColors({255, 255, 255}, {255, 255, 255});
 }
 
 
@@ -145,12 +147,27 @@ void TronGrid::resize(int xCells, int yCells, float _cellSize) {
     shader.end();
 }
 
+void TronGrid::setTargetColors(ofColor c1, ofColor c2) {
+    float lerp = cLerp.get();
+    ofColor currentC1 = cF1.getLerped(cT1, lerp);
+    ofColor currentC2 = cF2.getLerped(cT2, lerp);
+    cF1 = currentC1;
+    cF2 = currentC2;
+    cT1 = c1;
+    cT2 = c2;
+    cLerp.jumpTo(0);
+    cLerp.setTarget(1);
+}
+
 void TronGrid::draw() {
     if (!enabled) return;
 
     ofPushMatrix();
     ofTranslate({xSize * cellSize * -0.5, 0, ySize * cellSize * -0.5});
     shader.begin();
+    float lerp = cLerp.get();
+    shader.setUniform4f("c1", ofFloatColor(cF1.getLerped(cT1, lerp)));
+    shader.setUniform4f("c2", ofFloatColor(cF2.getLerped(cT2, lerp)));
     shader.setUniform2f("screenSize", { ofGetWidth(), ofGetHeight() });
     shader.setUniform1f("time", ofGetElapsedTimef());
     mesh.draw();

@@ -63,20 +63,12 @@ void ofApp::update() {
     t1.advance(deltaSeconds);
     saw1.advance(deltaSeconds);
 
-    if (ofGetKeyPressed('r')) {
-        float ramp = 0.0025;
-        glm::quat rotation  = glm::angleAxis(ramp, cam.getUpDir());
-        cam.rotateAround(rotation, cam.getTarget().getGlobalPosition());
-        cam.lookAt(cam.getTarget().getGlobalPosition(), glm::normalize(glm::vec3(0.2, 1, 0)));
-    }
-
     // Logo
     logo.update(deltaSeconds);
 
     // OSC
     ofxOscMessage msg;
     while (receiver.getNextMessage(msg)) handleOscMessage(msg);
-
     cam.setDistance(lerpZoom.get());
 
     // Orbit
@@ -155,6 +147,9 @@ void ofApp::handleOscMessage(const ofxOscMessage &msg) {
     if (addr == "/1/fader1") {
         // zoom
         lerpZoom.setTarget(ofMap(msg.getArgAsFloat(0), 0, 1, 80, 1));
+    } else if (addr == "/1/fader2")  {
+        float v = msg.getArgAsFloat(0);
+        logo.rotationSpeed.setTarget(ofMap(v, 0, 1, -10, 10));
     } else if (addr == "/1/fader5") {
         // bump orbit
         float v = msg.getArgAsFloat(0);
@@ -180,6 +175,19 @@ void ofApp::handleOscMessage(const ofxOscMessage &msg) {
     } else if (addr == "/1/toggle3") {
         grid.enabled = msg.getArgAsInt32(0);
     } else if (addr == "/1/toggle4") {
+    } else if (addr == "/2/fader6")  { // page 2
+        float v = msg.getArgAsFloat(0);
+        grid.cLerp.duration = ofMap(v, 0, 1, 0, 5);
+    } else if (addr == "/2/push1")  {
+        if (msg.getArgAsInt32(0)) { grid.setTargetColors({255, 255, 255}, {255, 255, 255}); } // white
+    } else if (addr == "/2/push2")  {
+        if (msg.getArgAsInt32(0)) { grid.setTargetColors({255, 0, 0}, {0, 0, 255}); }         // red/blue
+    } else if (addr == "/2/push3")  {
+        if (msg.getArgAsInt32(0)) { grid.setTargetColors({204, 0, 230}, {0, 127, 255}); }     // purple/blue
+    } else if (addr == "/2/push4")  {
+        if (msg.getArgAsInt32(0)) { grid.setTargetColors({0, 120, 255}, {0, 255, 255}); }
+    } else if (addr == "/2/push5")  {
+        if (msg.getArgAsInt32(0)) { grid.setTargetColors({50, 50, 50}, {0, 0, 255}); }
     } else {
         ofLog() << "Unhandled:" << addr;
     }

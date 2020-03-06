@@ -3,6 +3,8 @@
 
 uniform vec2 screenSize;
 uniform float time;
+uniform vec4 c1;
+uniform vec4 c2;
 in vec2 gridPositionVarying;
 
 // How perpendicular is the normal to a ray projected from the camera?
@@ -84,39 +86,48 @@ vec4 themeParametric(vec3 xColor, vec3 yColor) {
     col.rgb += xColor * (smoothstep(1-xWidth, 1, fract(gridPositionVarying.x)) * attenuation) * p;
 
     // z axis
-    col.rgb += yColor * (smoothstep(yWidth, 0, fract(gridPositionVarying.y)) * attenuation * p);
-    col.rgb += yColor * (smoothstep(1-yWidth, 1, fract(gridPositionVarying.y)) * attenuation * p);
+    vec3 tempCol = yColor * (smoothstep(yWidth, 0, fract(gridPositionVarying.y)) * attenuation * p);
+        tempCol += yColor * (smoothstep(1-yWidth, 1, fract(gridPositionVarying.y)) * attenuation * p);
+    // if (dot(tempCol, vec3(1)) > dot(col.rgb, vec3(1))) col.rgb = tempCol; // alternative blending
+    col.rgb += tempCol;
 
     return col;
 }
 
 vec4 colorForTheme(int theme) {
-    vec3 c1 = vec3(0.8, 0.0, 0.9);
-    vec3 c2 = vec3(0, 0.5, 1.0);
-
     switch(theme) {
     case 0:
         return themeClassic();
         break;
     case 1:
-        return themeParametric(c1, c2);
+        return themeParametric(c1.rgb, c2.rgb);
         break;
     case 2:
         return themeParametric(vec3(1), vec3(1));
+        break;
+    case 4:
+        return themeParametric(vec3(0.8, 0.0, 0.9), vec3(0, 0.5, 1.0)); // blue / purple
+        break;
     }
 }
 
 void main()
 {
-    float amountA = sin(time * PI / 10.) * .5 + 0.5;
-    float amountB = 1 - amountA;
-
-    vec4 colorA = colorForTheme(1) * amountA;
-    vec4 colorB = colorForTheme(2) * amountB;
-
     vec4 color = vec4(0);
-    color += colorA;
-    color += colorB;
+    // gradually expanding
+    // float maxSize = mod(floor(time * 7), 30);
+    // if (abs(gridPositionVarying.x) > maxSize || abs(gridPositionVarying.y) > maxSize) {
+    //     discard;
+    // }
+
+    // fade between colors
+    // float amountA = sin(time * PI / 10.) * .5 + 0.5;
+    // float amountB = 1 - amountA;
+    // vec4 colorA = colorForTheme(0) * amountA;
+    // vec4 colorB = colorForTheme(1) * amountB;
+    // color += colorA;
+    // color += colorB;
+    color += themeParametric(c1.rgb, c2.rgb);
 
     fragColor = color;
 }

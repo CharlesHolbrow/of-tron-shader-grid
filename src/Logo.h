@@ -8,12 +8,14 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Gen.h"
 
 class Logo {
 public:
     ofImage image;
     ofNode node;
     bool enabled;
+    LerpD rotationSpeed;
 
     void setup();
     void update(double deltaSeconds);

@@ -14,7 +14,7 @@ void Logo::setup() {
 }
 
 void Logo::update(double deltaSeconds) {
-    node.rotateDeg(0.5, {0, 1, 0});
+    node.rotateDeg(rotationSpeed.get() * deltaSeconds, {0, 1, 0});
 }
 
 void Logo::draw() {
