@@ -180,6 +180,7 @@ void TronGrid::draw() {
     shader.setUniform4f("c2", ofFloatColor(cF2.getLerped(cT2, cLerp2.get())));
     shader.setUniform2f("screenSize", { ofGetWidth(), ofGetHeight() });
     shader.setUniform1f("time", ofGetElapsedTimef());
+    shader.setUniform1f("displayRadius", (float)displayRadius);
     mesh.draw();
     shader.end();
     ofPopMatrix();

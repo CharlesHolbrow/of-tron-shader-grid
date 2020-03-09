@@ -115,12 +115,6 @@ void ofApp::draw() {
         ofSetColor(255);
         vs0.fbo.draw(0, 0, ofGetWidth(), ofGetHeight());
     }
-
-    ofDisableDepthTest();
-    ofSetColor((double)saw1 * 255, 0, 0);
-    ofDrawCircle(20, 20, 10);
-    ofSetColor(255);
-    ofEnableDepthTest();
 }
 
 //--------------------------------------------------------------
@@ -146,7 +140,7 @@ void ofApp::handleOscMessage(const ofxOscMessage &msg) {
 
     if (addr == "/1/fader1") {
         // zoom
-        lerpZoom.setTarget(ofMap(msg.getArgAsFloat(0), 0, 1, 80, 1));
+        lerpZoom.setTarget(ofMap(msg.getArgAsFloat(0), 0, 1, 120, 1));
     } else if (addr == "/1/fader2")  {
         float v = msg.getArgAsFloat(0);
         logo.rotationSpeed.setTarget(ofMap(v, 0, 1, -10, 10));
@@ -192,6 +186,9 @@ void ofApp::handleOscMessage(const ofxOscMessage &msg) {
         ofColor c;
         c.setHsb(hue, 255, 255);
         grid.setTargetColor2(c);
+    } else if (addr == "/2/fader10")  { // color 2
+        float v = msg.getArgAsFloat(0);
+        grid.displayRadius = (int)ofMap(v, 0, 1, 0, 40);
     } else if (addr == "/2/push1")  {
         if (msg.getArgAsInt32(0)) { grid.setTargetColors({255, 255, 255}, {255, 255, 255}); } // white
     } else if (addr == "/2/push2")  {

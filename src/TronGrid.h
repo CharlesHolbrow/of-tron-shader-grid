@@ -23,6 +23,7 @@ public:
     void setTargetColors(ofColor c1, ofColor c2);
     void setTargetColor1(ofColor c);
     void setTargetColor2(ofColor c);
+    int displayRadius = 100;
 
 private:
     // How many quads in the x/y dimensions

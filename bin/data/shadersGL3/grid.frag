@@ -5,6 +5,7 @@ uniform vec2 screenSize;
 uniform float time;
 uniform vec4 c1;
 uniform vec4 c2;
+uniform float displayRadius;
 in vec2 gridPositionVarying;
 
 // How perpendicular is the normal to a ray projected from the camera?
@@ -113,10 +114,11 @@ void main()
 {
     vec4 color = vec4(0);
     // gradually expanding
-    // float maxSize = mod(floor(time * 7), 30);
-    // if (abs(gridPositionVarying.x) > maxSize || abs(gridPositionVarying.y) > maxSize) {
-    //     discard;
-    // }
+
+    float limit = displayRadius;
+    if (abs(gridPositionVarying.x) > limit || abs(gridPositionVarying.y) > limit) {
+        discard;
+    }
 
     // fade between colors
     // float amountA = sin(time * PI / 10.) * .5 + 0.5;
